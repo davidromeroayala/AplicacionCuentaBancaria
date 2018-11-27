@@ -5,6 +5,8 @@
  */
 package aplicacioncuentabancaria;
 
+import java.util.Scanner;
+
 /**
  *
  * @author DRA69
@@ -20,9 +22,13 @@ public class Menu {
                 + "3. Ver el código de la entidad\n "
                 + "4. Ver el código de la oficina.\n "
                 + "5. Ver el número de la cuenta (solamente el número de cuenta, sin entidad, oficina ni dígitos de control).\n "
+                + "6. Ver el número de control.\n "
                 + "7. Realizar un ingreso. Habrá que solicitar por teclado la cantidad que se desea ingresar.\n "
                 + "8. Retirar efectivo. Habrá que solicitar por teclado la cantidad que se desea retirar.\n "
                 + "9. Consultar saldo.\n " 
                 + "0. Salir");
     }
+    
+    
+    
 }

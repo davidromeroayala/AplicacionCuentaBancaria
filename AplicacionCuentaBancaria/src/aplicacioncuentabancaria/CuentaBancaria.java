@@ -5,6 +5,8 @@
  */
 package aplicacioncuentabancaria;
 
+import java.util.Scanner;
+
 /**
  *
  * @author DRA69
@@ -18,24 +20,32 @@ public class CuentaBancaria {
    private String codigoInterno;
    private int saldo;
 
-    public CuentaBancaria(String nombre, String cuenta, codigoControl, String codigoInterno, int saldo) {
+    public CuentaBancaria(String nombre, String cuenta) {
         if (nombre.length()>19){
-            this.nombre = nombre.substring(0, 19);
+            this.nombre = nombre.substring(0, 20);
         }else{
             this.nombre = nombre;
         }
-        if (cuenta.length()==19){
-            dividirCuenta(cuenta);
-        }else{
-            do{
-                System.out.println("La cuenta son 20 dígitos");
-                
-            }while (cuenta.length()!=19);
-            dividirCuenta(cuenta);
-        }
         
+        this.cuenta = cuenta;
+        do{
+            
+            if (this.cuenta.length()==20){
+                dividirCuenta(this.cuenta);
+            }else{
+                do{
+                    System.out.println("Cuenta erronea la cuenta son 20 dígitos");
+                    Scanner leer=new Scanner(System.in);
+                    this.cuenta=leer.nextLine();
+                }while (this.cuenta.length()!=20);
+                dividirCuenta(this.cuenta);
+            }    
+            
+        }while (!confirmarCuenta());
         
-        this.saldo = saldo;
+      
+        
+      saldo =0;
     }
 
     public CuentaBancaria() {
@@ -52,7 +62,12 @@ public class CuentaBancaria {
     return getSaldo();
     }
     public int retirar(int retirar){
-        setSaldo(getSaldo() - retirar);
+        if (retirar>saldo) {
+            System.out.println("No puede retirar dicha cantidad");
+        }else{
+            setSaldo(getSaldo() - retirar);
+        }
+        
     return getSaldo();
     }
 
@@ -156,20 +171,61 @@ public class CuentaBancaria {
 
     private void dividirCuenta(String cuenta) {
        
-        this.codigoEntidad=cuenta.substring(0,3);
-        this.codigoOficina=cuenta.substring(4,7);
-        this.codigoControl=cuenta.substring(8,9);
-        this.codigoInterno=cuenta.substring(10,19);
+        this.codigoEntidad=cuenta.substring(0,4);
+        this.codigoOficina=cuenta.substring(4,8);
+        this.codigoControl=cuenta.substring(8,10);
+        this.codigoInterno=cuenta.substring(10,20);
        
     
     }
-    public boolean confirmarCuenta(){
+    private boolean confirmarCuenta(){
+        boolean confirmado=false;
         int resultado=0;
-       resultado+=(Integer.parseInt(codigoEntidad.substring(0,0))*4); 
-       resultado+=(Integer.parseInt(codigoEntidad.substring(1,1))*8); 
-       resultado+=(Integer.parseInt(codigoEntidad.substring(2,2))*5); 
-       resultado+=(Integer.parseInt(codigoEntidad.substring(3,3))*10); 
-       
+        int codigo1=11;
+        int codigo2=11;
+        int codigototal=0;
+       resultado+=(Integer.parseInt(codigoEntidad.substring(0,1))*4); 
+       resultado+=(Integer.parseInt(codigoEntidad.substring(1,2))*8); 
+       resultado+=(Integer.parseInt(codigoEntidad.substring(2,3))*5); 
+       resultado+=(Integer.parseInt(codigoEntidad.substring(3,4))*10); 
+       resultado+=(Integer.parseInt(codigoOficina.substring(0,1))*9);
+       resultado+=(Integer.parseInt(codigoOficina.substring(1,2))*7);
+       resultado+=(Integer.parseInt(codigoOficina.substring(2,3))*3);
+       resultado+=(Integer.parseInt(codigoOficina.substring(3,4))*6);
+       resultado=resultado%11;
+       codigo1-=resultado;
+        if (codigo1==10) {
+            codigo1=1;
+        }
+        if (codigo1==11) {
+            codigo1=0;
+        }
+        resultado=0;
+        resultado+=(Integer.parseInt(codigoInterno.substring(0,1))*1);
+        resultado+=(Integer.parseInt(codigoInterno.substring(1,2))*2);
+        resultado+=(Integer.parseInt(codigoInterno.substring(2,3))*4);
+        resultado+=(Integer.parseInt(codigoInterno.substring(3,4))*8);
+        resultado+=(Integer.parseInt(codigoInterno.substring(4,5))*5);
+        resultado+=(Integer.parseInt(codigoInterno.substring(5,6))*10);
+        resultado+=(Integer.parseInt(codigoInterno.substring(6,7))*9);
+        resultado+=(Integer.parseInt(codigoInterno.substring(7,8))*7);
+        resultado+=(Integer.parseInt(codigoInterno.substring(8,9))*3);
+        resultado+=(Integer.parseInt(codigoInterno.substring(9,10))*6);
+        resultado=resultado%11;
+        codigo2-=resultado;
+          if (codigo2==10) {
+            codigo2=1;
+        }
+        if (codigo2==11) {
+            codigo2=0;
+        }
+        codigototal=(codigo1*10)+(codigo2);
+        if (codigototal==Integer.parseInt(codigoControl)) {
+            confirmado=true;
+        }else{
+            this.cuenta="";
+        }
+        return confirmado;
     }   
    
 }
